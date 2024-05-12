@@ -16,7 +16,7 @@ router.get('/', getClubs);
 // Retrieve a specific club by ID
 router.get('/:id', getOneClub);
 
-router.get('/clubs/search', searchClubs)
+router.post('/clubs/search', searchClubs)
 
 // Create a new club
 router.post('/', createClub);
