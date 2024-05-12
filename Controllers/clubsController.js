@@ -98,6 +98,29 @@ const deleteClub = async (req, res) => {
         res.status(500).json({ error: "حدث خطأ أثناء حذف النادي" });
     }
 };
+// Search for clubs by keyword
+const searchClubs = async (req, res) => {
+    const { keyword } = req.body;
+
+    if (!keyword) {
+        return res.status(400).json({ error: "يجب تقديم كلمة البحث" });
+    }
+
+    try {
+        const clubs = await Club.find({
+            $or: [
+                { club_name: { $regex: keyword, $options: "i" } },
+                { club_description: { $regex: keyword, $options: "i" } }
+            ]
+        }).sort({ createdAt: -1 });
+
+        res.status(200).json(clubs);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "حدث خطأ أثناء البحث عن الأندية" });
+    }
+};
+
 
 // Export all the controller functions for use in routes
-module.exports = { getClubs, getOneClub, createClub, updateClub, deleteClub };
+module.exports = { getClubs, getOneClub, createClub, updateClub, deleteClub,searchClubs };
